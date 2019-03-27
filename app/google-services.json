@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "501804874299",
+    "firebase_url": "https://shubaklubak.firebaseio.com",
+    "project_id": "shubaklubak",
+    "storage_bucket": "shubaklubak.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501804874299:android:fe027fc7b9b407c3",
+        "android_client_info": {
+          "package_name": "edu.mareeaaup.s.shubaklubak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501804874299-o3uqfehsud7l5qadickkk6qqem5hqhts.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.mareeaaup.s.shubaklubak",
+            "certificate_hash": "295c5f5ddd337043df9d36d1359a5240bf4a9df3"
+          }
+        },
+        {
+          "client_id": "501804874299-kcobfe1tla3hg0qudkdj9rk2td5492e9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZteyyQ6ihzSON96Q4tJLJImcKDXqVOVg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501804874299-kcobfe1tla3hg0qudkdj9rk2td5492e9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
