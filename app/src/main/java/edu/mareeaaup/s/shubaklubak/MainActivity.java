@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     public static final int RC_SIGN_IN = 1;
 
-    List<AuthUI.IdpConfig>providers= Arrays.asList(
+    List<AuthUI.IdpConfig> providers = Arrays.asList(
 
             new AuthUI.IdpConfig.EmailBuilder().build(),
             new AuthUI.IdpConfig.PhoneBuilder().build(),
@@ -33,22 +33,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mFirebaseAuth= FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user !=null){
-                    Toast.makeText(MainActivity.this,"User Signed In",Toast.LENGTH_SHORT).show();
-                }
-                else {
+                if (user != null) {
+                    Toast.makeText(MainActivity.this, "User Signed In", Toast.LENGTH_SHORT).show();
+                } else {
                     startActivityForResult(AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setAvailableProviders(providers)
                                     .setIsSmartLockEnabled(false)
                                     .build(),
-                    RC_SIGN_IN);
+                            RC_SIGN_IN);
                 }
 
             }
@@ -61,14 +60,14 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 
-    @Overrideh
+    @Override
     protected void onPause() {
         super.onPause();
         mFirebaseAuth.addAuthStateListener(mAuthListener);
 
     }
 
-    public void onClick(View view){
+    public void onClick(View view) {
 
         AuthUI.getInstance()
                 .signOut(this)
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
 
-                        Toast.makeText(MainActivity.this,"User Signed Out",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "User Signed Out", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });
