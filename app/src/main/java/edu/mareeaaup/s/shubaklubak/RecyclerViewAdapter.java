@@ -8,23 +8,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
+import java.util.List;
+
+import edu.mareeaaup.s.shubaklubak.Model.Device;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private ArrayList<String> mdevicesNames = new ArrayList<>();
-    private ArrayList<Boolean> mdevicesStatus = new ArrayList<>();
+    //private ArrayList<String> mdevicesNames = new ArrayList<>();
+    //private ArrayList<Boolean> mdevicesStatus = new ArrayList<>();
     private Context mContext;
-    public RecyclerViewAdapter(Context context, ArrayList<String> devicesNames, ArrayList<Boolean> devicesStatus){
-        mdevicesNames = devicesNames;
-        mdevicesStatus = devicesStatus;
+    private DatabaseReference databaseReference;
+    private List<Device> devices = new ArrayList<>();
+
+    public RecyclerViewAdapter(Context context, List<Device> devices ){
+        this.devices = devices;
         mContext = context;
     }
     @NonNull
@@ -38,21 +46,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         Log.d(TAG, "onBindViewHolder: inside");
-        viewHolder.deviceName.setText(mdevicesNames.get(i));
-        viewHolder.status.setChecked(mdevicesStatus.get(i));
+        viewHolder.deviceName.setText(devices.get(i).getName());
+        viewHolder.status.setChecked(devices.get(i).getState());
 
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked: "+ mdevicesNames.get(i));
-                Toast.makeText(mContext, mdevicesNames.get(i),Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Clicked2: "+ devices.size());
+                Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
             }
         });
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked==Boolean.TRUE){
-                    mdevicesStatus.set(i,Boolean.TRUE);
+                    devices.get(i).setState(Boolean.TRUE);
 
                     //FirebaseDatabase database = FirebaseDatabase.getInstance();
                     //DatabaseReference myRef = database.getReference("message");
@@ -60,17 +68,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     //myRef.setValue("Hello, World!");
 
                 }else{
-                    mdevicesStatus.set(i,Boolean.FALSE);
+                    devices.get(i).setState(Boolean.FALSE);
                 }
                 // code to update the firebase
-                Toast.makeText(mContext, mdevicesStatus.get(i).toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mdevicesNames.size();
+        return (devices != null) ? devices.size():0;
     }
 
 
@@ -78,13 +86,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         TextView deviceName;
         Switch status;
-        RelativeLayout parentLayout;
+        LinearLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            deviceName = (TextView) itemView.findViewById(R.id.device_name);
-            status = (Switch) itemView.findViewById(R.id.status);
-            parentLayout = (RelativeLayout) itemView.findViewById(R.id.parent_layout);
+            deviceName = itemView.findViewById(R.id.device_name);
+            status =  itemView.findViewById(R.id.status);
+            parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
 }

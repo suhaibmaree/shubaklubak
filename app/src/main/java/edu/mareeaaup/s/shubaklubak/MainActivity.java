@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -21,11 +22,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import edu.mareeaaup.s.shubaklubak.Model.Device;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -141,6 +146,37 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+    public void add(View v) {
+
+        EditText name = findViewById(R.id.dev_name);
+        EditText state = findViewById(R.id.dev_state);
+        String deviceName = name.getText().toString();
+        boolean deviceState;
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+
+        if(state.getText().toString().equals("1"))
+            deviceState = Boolean.TRUE;
+        else
+            deviceState = Boolean.FALSE;
+
+        Device device = new Device();
+        device.setName(deviceName);
+        device.setState(deviceState);
+        mDatabase.child(mFirebaseAuth.getUid()).push().setValue(device)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                            Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
 
 
 
