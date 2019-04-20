@@ -40,29 +40,4 @@ public class ModesFragment extends Fragment {
         return view;
     }
 
-    public void add(View v) {
-        String deviceName = name.getText().toString();
-        boolean deviceState;
-        if(state.getText().toString().equals("1"))
-            deviceState = Boolean.TRUE;
-        else
-            deviceState = Boolean.FALSE;
-
-        Device device = new Device();
-        device.setName(deviceName);
-        device.setState(deviceState);
-        mDatabase.child(mFirebaseAuth.getUid()).push().setValue(device)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful())
-                            Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(getContext(),"Error", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-    }
-
 }

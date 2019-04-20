@@ -36,42 +36,14 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    public static final int RC_SIGN_IN = 1;
     private DrawerLayout drawer;
-
-    List<AuthUI.IdpConfig> providers = Arrays.asList(
-
-            new AuthUI.IdpConfig.EmailBuilder().build(),
-            new AuthUI.IdpConfig.PhoneBuilder().build(),
-            new AuthUI.IdpConfig.GoogleBuilder().build()
-    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Toast.makeText(MainActivity.this, "User Signed In", Toast.LENGTH_SHORT).show();
-                } else {
-                    startActivityForResult(AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setAvailableProviders(providers)
-                                    .setIsSmartLockEnabled(false)
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-
-            }
-        };
-
-        if(mFirebaseAuth.getCurrentUser() != null) {
 
             android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
             drawer = findViewById(R.id.drawer_layout);
@@ -111,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-        }//end if
-
     }//end on create
 
     @Override
@@ -124,18 +94,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mFirebaseAuth.addAuthStateListener(mAuthListener);
-
-    }
 
     public void onClick(View view) {
 
