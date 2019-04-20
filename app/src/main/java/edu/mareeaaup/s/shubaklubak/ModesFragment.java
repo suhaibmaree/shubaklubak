@@ -27,13 +27,13 @@ public class ModesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         View view = inflater.inflate(R.layout.fragment_modes,container,false);
+        View view = inflater.inflate(R.layout.fragment_modes,container,false);
 
-         name = view.findViewById(R.id.dev_name);
-         state = view.findViewById(R.id.dev_state);
-         mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
-         mDatabase.keepSynced(true);
-         mFirebaseAuth = FirebaseAuth.getInstance();
+        name = view.findViewById(R.id.dev_name);
+        state = view.findViewById(R.id.dev_state);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+        mDatabase.keepSynced(true);
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
 
 
@@ -51,7 +51,7 @@ public class ModesFragment extends Fragment {
         Device device = new Device();
         device.setName(deviceName);
         device.setState(deviceState);
-        mDatabase.child(mFirebaseAuth.getUid()).child("testnane").push().setValue(device)
+        mDatabase.child(mFirebaseAuth.getUid()).push().setValue(device)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

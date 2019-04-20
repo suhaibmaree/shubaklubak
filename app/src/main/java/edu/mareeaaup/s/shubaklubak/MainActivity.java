@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -70,43 +71,47 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.home:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new HomeFragment()).commit();
-                        break;
+        if(mFirebaseAuth.getCurrentUser() != null) {
 
-                    case R.id.modes:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new ModesFragment()).commit();
-                        break;
+            android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+            drawer = findViewById(R.id.drawer_layout);
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.home:
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                    new HomeFragment()).commit();
+                            break;
 
-                    case R.id.users:
-                        Toast.makeText(MainActivity.this,"Users",Toast.LENGTH_SHORT).show();
-                        break;
+                        case R.id.modes:
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                    new ModesFragment()).commit();
+                            break;
+
+                        case R.id.users:
+                            Toast.makeText(MainActivity.this, "Users", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
                 }
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
+            });
+
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                    R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HomeFragment()).commit();
+                navigationView.setCheckedItem(R.id.home);
+
             }
-        });
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
-                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeFragment()).commit();
-            navigationView.setCheckedItem(R.id.home);
-
-        }
+        }//end if
 
     }//end on create
 

@@ -25,8 +25,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    //private ArrayList<String> mdevicesNames = new ArrayList<>();
-    //private ArrayList<Boolean> mdevicesStatus = new ArrayList<>();
+    //for long click listener
+    private onItemLongClickListener mListener;
+    public interface onItemLongClickListener{
+        void onItemLongClick(int position);
+    }
+    public void setOnItemLongClickListener(onItemLongClickListener listener){
+        mListener = listener;
+    }
+
+    //for database
     private Context mContext;
     private DatabaseReference databaseReference;
     private List<Device> devices = new ArrayList<>();
@@ -53,7 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Clicked2: "+ devices.size());
-                Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
             }
         });
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -93,6 +101,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             deviceName = itemView.findViewById(R.id.device_name);
             status =  itemView.findViewById(R.id.status);
             parentLayout = itemView.findViewById(R.id.parent_layout);
+
+            //on click listener for card
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (mListener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            mListener.onItemLongClick(position);
+                        }
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
     private List<Device> mDevices = new ArrayList<>();
-    public RecyclerViewAdapter adapter;
+    public RecyclerViewAdapter mAdapter;
     public RecyclerView recyclerView;
     private ProgressBar progressBar;
     private DatabaseReference mDatabase;
@@ -43,42 +43,54 @@ public class HomeFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progress_bar);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
-        mDatabase.child(FirebaseAuth.getInstance().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                progressBar.setVisibility(View.VISIBLE);
-                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-                Log.d("getFireData","before loop");
+        if (FirebaseAuth.getInstance().getUid() !=null) {
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+            mDatabase.child(FirebaseAuth.getInstance().getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                            Log.d("getFireData", "before loop");
 
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    mDevices.add(ds.getValue(Device.class));
-                    Log.d("getFireData","dev name"+ds.getValue(Device.class).getName());
-                    Log.d("getFireData","dev state"+ds.getValue(Device.class).getState());
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                mDevices.add(ds.getValue(Device.class));
+                                Log.d("getFireData", "dev name" + ds.getValue(Device.class).getName());
+                                Log.d("getFireData", "dev state" + ds.getValue(Device.class).getState());
 
-                }
+                            }
 
-                adapter.notifyDataSetChanged();
-                Log.d("getFireData","After loop");
-                Log.d("getFireData","List size "+mDevices.size());
-                progressBar.setVisibility(View.INVISIBLE);
-            }
+                            mAdapter.notifyDataSetChanged();
+                            Log.d("getFireData", "After loop");
+                            Log.d("getFireData", "List size " + mDevices.size());
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
 
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                        }
+                    });
+
+        }//end if
 
         Log.d("getFireData","recyclerView");
 
+        //build recycler view
         recyclerView = view.findViewById(R.id.recycler_view);
-        adapter = new RecyclerViewAdapter(getContext(), mDevices);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new RecyclerViewAdapter(getContext(), mDevices);
+        recyclerView.setAdapter(mAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        //on long item click listener for recycler view card
+        mAdapter.setOnItemLongClickListener(new RecyclerViewAdapter.onItemLongClickListener() {
+            @Override
+            public void onItemLongClick(int position) {
+                Toast.makeText(getContext(),"state "+mDevices.get(position).getState(),Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
