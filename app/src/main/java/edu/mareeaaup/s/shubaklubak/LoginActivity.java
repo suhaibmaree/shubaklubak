@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -60,12 +61,26 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                FirebaseUser users = firebaseAuth.getCurrentUser();
+                if (users != null){
+                    startActivity(intent);
+                }
+            }
+        };// end listener
+
         Button logIn = findViewById(R.id.btn_login);
         logIn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
 
                 mFirebaseAuth = FirebaseAuth.getInstance();
                 mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -91,7 +106,6 @@ public class LoginActivity extends AppCompatActivity  {
                         }
                     }
                 };
-
                 mFirebaseAuth.addAuthStateListener(mAuthStateListener);
             }
         });
@@ -99,6 +113,12 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     }//end onCreat
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
 
     @Override
     protected void onPause() {
