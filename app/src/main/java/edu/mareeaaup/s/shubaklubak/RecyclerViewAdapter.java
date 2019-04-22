@@ -61,7 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Clicked2: "+ devices.size());
-                //Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
             }
         });
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

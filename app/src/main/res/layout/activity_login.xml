@@ -27,12 +27,16 @@
 
         <Button
             android:id="@+id/btn_login"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_light"
             android:text="Login"
+            android:background="@drawable/button_corners"
+            android:textColor="@color/White"
             />
 
     </LinearLayout>
