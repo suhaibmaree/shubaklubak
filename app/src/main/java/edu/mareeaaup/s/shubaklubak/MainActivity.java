@@ -115,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
         Device device = new Device();
         device.setName(deviceName);
         device.setState(deviceState);
-        mDatabase.child(mFirebaseAuth.getUid()).push().setValue(device)
+        device.setKey(mDatabase.child("devices").push().getKey());
+        mDatabase.child(mFirebaseAuth.getUid()).child(device.getKey()).setValue(device)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

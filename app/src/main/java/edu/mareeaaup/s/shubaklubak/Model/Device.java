@@ -1,14 +1,23 @@
 package edu.mareeaaup.s.shubaklubak.Model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.io.Serializable;
 
 public class Device implements Serializable {
 
-    String name;
-    Boolean state;
+    private String name;
+    private Boolean state;
+
+
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public Device() {
     }

@@ -14,7 +14,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +40,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private DatabaseReference databaseReference;
     private List<Device> devices = new ArrayList<>();
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     public RecyclerViewAdapter(Context context, List<Device> devices ){
         this.devices = devices;
         mContext = context;
     }
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,18 +73,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                Device device = new Device();
+
                 if(isChecked==Boolean.TRUE){
                     devices.get(i).setState(Boolean.TRUE);
 
-                    //FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    //DatabaseReference myRef = database.getReference("message");
-
-                    //myRef.setValue("Hello, World!");
-
                 }else{
                     devices.get(i).setState(Boolean.FALSE);
+
                 }
+
                 // code to update the firebase
+                device = devices.get(i);
+                mDatabase.child(mFirebaseAuth.getUid()).child(devices.get(i).getKey()).setValue(device);
+
                 Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
             }
         });
