@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import edu.mareeaaup.s.shubaklubak.Fragments.HomeFragment;
+import edu.mareeaaup.s.shubaklubak.Fragments.ModesFragment;
 import edu.mareeaaup.s.shubaklubak.Model.Device;
 
 public class MainActivity extends AppCompatActivity {

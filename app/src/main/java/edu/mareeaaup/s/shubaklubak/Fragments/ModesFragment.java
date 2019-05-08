@@ -1,4 +1,4 @@
-package edu.mareeaaup.s.shubaklubak;
+package edu.mareeaaup.s.shubaklubak.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import edu.mareeaaup.s.shubaklubak.Model.Device;
+import edu.mareeaaup.s.shubaklubak.R;
 
 public class ModesFragment extends Fragment {
 

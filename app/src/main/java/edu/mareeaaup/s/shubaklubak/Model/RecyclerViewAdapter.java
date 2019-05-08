@@ -1,4 +1,4 @@
-package edu.mareeaaup.s.shubaklubak;
+package edu.mareeaaup.s.shubaklubak.Model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.mareeaaup.s.shubaklubak.Model.Device;
+import edu.mareeaaup.s.shubaklubak.R;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -40,7 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private DatabaseReference databaseReference;
     private List<Device> devices = new ArrayList<>();
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     public RecyclerViewAdapter(Context context, List<Device> devices ){
@@ -74,21 +73,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                Device device = new Device();
-
+                //update switch button
                 if(isChecked==Boolean.TRUE){
                     devices.get(i).setState(Boolean.TRUE);
-
                 }else{
                     devices.get(i).setState(Boolean.FALSE);
-
                 }
 
                 // code to update the firebase
+                Device device = new Device();
                 device = devices.get(i);
                 mDatabase.child(mFirebaseAuth.getUid()).child(devices.get(i).getKey()).setValue(device);
-
-                Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
             }
         });
     }

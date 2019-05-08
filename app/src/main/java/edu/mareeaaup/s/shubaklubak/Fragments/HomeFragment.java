@@ -1,20 +1,20 @@
-package edu.mareeaaup.s.shubaklubak;
+package edu.mareeaaup.s.shubaklubak.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import edu.mareeaaup.s.shubaklubak.Model.Device;
+import edu.mareeaaup.s.shubaklubak.R;
+import edu.mareeaaup.s.shubaklubak.Model.RecyclerViewAdapter;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
 
     private static final String TAG = "MainActivity";
     private List<Device> mDevices = new ArrayList<>();
@@ -34,12 +36,14 @@ public class HomeFragment extends Fragment {
     public RecyclerView recyclerView;
     private ProgressBar progressBar;
     private DatabaseReference mDatabase;
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private int flag =0;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
+        final View view = inflater.inflate(R.layout.fragment_home,container,false);
 
         progressBar = view.findViewById(R.id.progress_bar);
 
@@ -84,15 +88,45 @@ public class HomeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        //on long item click listener for recycler view card
+        //long item click listener for recycler view card
         mAdapter.setOnItemLongClickListener(new RecyclerViewAdapter.onItemLongClickListener() {
             @Override
-            public void onItemLongClick(int position) {
-                Toast.makeText(getContext(),"state "+mDevices.get(position).getState(),Toast.LENGTH_SHORT).show();
+            public void onItemLongClick(final int position) {
+
+                //create Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                View mView = getLayoutInflater().inflate(R.layout.layout_dialog,null);
+                final EditText mDeviceName = mView.findViewById(R.id.dialog_device_name);
+                //set ok and cancel button
+                builder.setView(mView)
+                        .setTitle("Edit Device Name")
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String deviceName = mDeviceName.getText().toString();
+                                mDevices.get(position).setName(deviceName);
+                                Device device = mDevices.get(position);
+                                mDatabase.child(mFirebaseAuth.getUid()).child(mDevices.get(position).getKey()).setValue(device);
+
+                                //refresh fragment
+                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                        new HomeFragment()).commit();
+
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+
             }
         });
 
         return view;
     }//end onCreate
-
 }
