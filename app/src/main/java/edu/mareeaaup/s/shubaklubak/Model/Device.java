@@ -7,8 +7,6 @@ public class Device implements Serializable {
 
     private String name;
     private Boolean state;
-
-
     private String key;
 
     public String getKey() {

@@ -39,7 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private DatabaseReference databaseReference;
     private List<Device> devices = new ArrayList<>();
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     public RecyclerViewAdapter(Context context, List<Device> devices ){
@@ -83,7 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 // code to update the firebase
                 Device device = new Device();
                 device = devices.get(i);
-                mDatabase.child(mFirebaseAuth.getUid()).child(devices.get(i).getKey()).setValue(device);
+                mDatabase.child(mFirebaseAuth.getUid()).child("devices").child(devices.get(i).getKey()).setValue(device);
             }
         });
     }

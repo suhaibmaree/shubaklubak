@@ -1,5 +1,6 @@
 package edu.mareeaaup.s.shubaklubak;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import edu.mareeaaup.s.shubaklubak.Fragments.AdministratorFragment;
 import edu.mareeaaup.s.shubaklubak.Fragments.HomeFragment;
 import edu.mareeaaup.s.shubaklubak.Fragments.ModesFragment;
 import edu.mareeaaup.s.shubaklubak.Model.Device;
@@ -33,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mFirebaseAuth = FirebaseAuth.getInstance();
-
+        if(mFirebaseAuth.getCurrentUser() == null){
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
             android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
             drawer = findViewById(R.id.drawer_layout);
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
+
                         case R.id.home:
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                     new HomeFragment()).commit();
@@ -50,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.modes:
                             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                     new ModesFragment()).commit();
+                            break;
+
+                        case R.id.administrator:
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                    new AdministratorFragment()).commit();
                             break;
 
                         case R.id.users:
@@ -85,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onClick(View view) {
+    public void logout(View view) {
 
         AuthUI.getInstance()
                 .signOut(this)
@@ -93,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
 
+                        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                        startActivity(intent);
                         Toast.makeText(MainActivity.this, "User Signed Out", Toast.LENGTH_SHORT).show();
                         finish();
                     }
@@ -107,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         String deviceName = name.getText().toString();
         boolean deviceState;
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
         if(state.getText().toString().equals("1"))
             deviceState = Boolean.TRUE;
@@ -117,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
         Device device = new Device();
         device.setName(deviceName);
         device.setState(deviceState);
-        device.setKey(mDatabase.child("devices").push().getKey());
-        mDatabase.child(mFirebaseAuth.getUid()).child(device.getKey()).setValue(device)
+        device.setKey(mDatabase.push().getKey());
+        mDatabase.child(mFirebaseAuth.getUid()).child("devices").child(device.getKey()).setValue(device)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -128,6 +142,17 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+//        mDatabase.child(mFirebaseAuth.getUid()).child("modes").child(device.getKey()).setValue(device)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if(task.isSuccessful())
+//                            Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
+//                        else
+//                            Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
 
     }

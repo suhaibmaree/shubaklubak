@@ -48,8 +48,8 @@ public class HomeFragment extends Fragment{
         progressBar = view.findViewById(R.id.progress_bar);
 
         if (FirebaseAuth.getInstance().getUid() !=null) {
-            mDatabase = FirebaseDatabase.getInstance().getReference().child("devices");
-            mDatabase.child(FirebaseAuth.getInstance().getUid())
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+            mDatabase.child(FirebaseAuth.getInstance().getUid()).child("devices")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -112,7 +112,7 @@ public class HomeFragment extends Fragment{
                                 String deviceName = mDeviceName.getText().toString();
                                 mDevices.get(position).setName(deviceName);
                                 Device device = mDevices.get(position);
-                                mDatabase.child(mFirebaseAuth.getUid()).child(mDevices.get(position).getKey()).setValue(device);
+                                mDatabase.child(mFirebaseAuth.getUid()).child("devices").child(mDevices.get(position).getKey()).setValue(device);
 
                                 //refresh fragment
                                 getFragmentManager().beginTransaction().replace(R.id.fragment_container,
