@@ -22,9 +22,9 @@ import java.util.List;
 
 import edu.mareeaaup.s.shubaklubak.R;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class AddModeAdapter extends RecyclerView.Adapter<AddModeAdapter.ViewHolder> {
 
-    private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "AddModeAdapter";
 
     //for long click listener
     private onItemLongClickListener mListener;
@@ -39,11 +39,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private DatabaseReference databaseReference;
     private List<Device> devices = new ArrayList<>();
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mFirebaseAuth.getUid()).child("devices");
 
-
-    public RecyclerViewAdapter(Context context, List<Device> devices ){
+    public AddModeAdapter(Context context, List<Device> devices ){
         this.devices = devices;
         mContext = context;
     }
@@ -60,8 +59,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         Log.d(TAG, "onBindViewHolder: inside");
-        Log.d(TAG, "onBindViewHolder: inside"+devices.size());
-        Log.d(TAG, "onBindViewHolder: inside"+devices.get(i).getName());
         viewHolder.deviceName.setText(devices.get(i).getName());
         viewHolder.status.setChecked(devices.get(i).getState());
 
@@ -86,7 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 // code to update the firebase
                 Device device = new Device();
                 device = devices.get(i);
-                mDatabase.child(devices.get(i).getKey()).setValue(device);
+                mDatabase.child(mFirebaseAuth.getUid()).child("devices").child(devices.get(i).getKey()).setValue(device);
             }
         });
     }
