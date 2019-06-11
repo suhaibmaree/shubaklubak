@@ -4,16 +4,25 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <ProgressBar
-        android:id="@+id/progress_bar_modes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width = "match_parent"
-        android:layout_height = "match_parent"
-        android:id="@+id/recycler_view_modes"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/Gainsboro">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:id="@+id/recycler_view_modes"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_modes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/moode_fab"
@@ -22,6 +31,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:backgroundTint="#2196F3"
-        android:src="@drawable/plus" />
+        android:src="@drawable/plus"
+        android:elevation="6dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

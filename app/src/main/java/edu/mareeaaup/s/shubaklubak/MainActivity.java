@@ -64,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
                                     new AdministratorFragment()).commit();
                             break;
 
-                        case R.id.users:
-                            Toast.makeText(MainActivity.this, "Users", Toast.LENGTH_SHORT).show();
+                        case R.id.help:
+                            Toast.makeText(MainActivity.this, "Help", Toast.LENGTH_SHORT).show();
+                            break;
+
+                        case R.id.logout:
+                            logout();
                             break;
                     }
                     drawer.closeDrawer(GravityCompat.START);
@@ -97,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void logout(View view) {
+    public void logout() {
 
         AuthUI.getInstance()
                 .signOut(this)
@@ -142,17 +146,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-//        mDatabase.child(mFirebaseAuth.getUid()).child("modes").child(device.getKey()).setValue(device)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if(task.isSuccessful())
-//                            Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
-//                        else
-//                            Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
 
 
     }

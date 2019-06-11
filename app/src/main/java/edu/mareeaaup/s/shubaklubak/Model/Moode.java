@@ -3,13 +3,25 @@ package edu.mareeaaup.s.shubaklubak.Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Moode implements Serializable {
 
     private Boolean state;
     private String name;
     private String key;
-    //private List devices = new ArrayList<Device>();
+    private List<Device> devices = new ArrayList<>();
+    //private Map<String, Device> devices;
+
+    public Moode() {
+    }
+
+    public Moode( List<Device> devices, String key, Boolean state) {
+        this.devices = devices;
+        this.state = state;
+        this.key = key;
+    }
+
 
     public String getName() {
         return name;
@@ -35,21 +47,23 @@ public class Moode implements Serializable {
         this.key = key;
     }
 
-    public Moode() {
+    public List<Device> getDevices() {
+        return devices;
     }
 
-//    public List getDevices() {
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
+
+    //    public Map<String, Device> getDevices() {
 //        return devices;
 //    }
 
-//    public void setDevices(List devices) {
+//    public void setDevices(Map<String, Device> devices) {
 //        this.devices = devices;
 //    }
 
-    public Moode(String key, Boolean state) {
-        this.state = state;
-        this.key = key;
-    }
+
 
 }
 

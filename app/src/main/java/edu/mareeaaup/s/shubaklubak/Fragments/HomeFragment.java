@@ -59,8 +59,8 @@ public class HomeFragment extends Fragment{
 
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                 mDevices.add(ds.getValue(Device.class));
-                                Log.d("getFireData", "dev name" + ds.getValue(Device.class).getName());
-                                Log.d("getFireData", "dev state" + ds.getValue(Device.class).getState());
+                                Log.d("getFireData", "dev name " + ds.getValue(Device.class).getName());
+                                Log.d("getFireData", "dev state " + ds.getValue(Device.class).getState());
 
                             }
 

@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.mareeaaup.s.shubaklubak.R;
@@ -25,12 +26,12 @@ import edu.mareeaaup.s.shubaklubak.R;
 public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
 
 
-    public List<Moode> modeList;
+    public ArrayList<Moode> modeList;
     public Context mContext;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("modes");
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
-    public ModesAdapter(Context mContext, List<Moode> modeList) {
+    public ModesAdapter(Context mContext, ArrayList<Moode> modeList) {
         this.modeList = modeList;
         this.mContext = mContext;
 
@@ -51,6 +52,7 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
         viewHolder.modeName.setText(modeList.get(i).getName());
         viewHolder.status.setChecked(modeList.get(i).getState());
 
+        Log.d("GETF","inside adapter "+modeList.size());
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,16 +73,15 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
                 // code to update the firebase
                 Moode mode = new Moode();
                 mode = modeList.get(i);
-                mDatabase.child(modeList.get(i).getKey()).setValue(mode);
+                mDatabase.child(FirebaseAuth.getInstance().getUid()).child("modes").child(modeList.get(i).getKey()).setValue(mode);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return (modeList != null) ? modeList.size():0;
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView modeName;
