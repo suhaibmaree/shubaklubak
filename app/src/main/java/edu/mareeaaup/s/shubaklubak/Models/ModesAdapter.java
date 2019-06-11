@@ -1,32 +1,27 @@
-package edu.mareeaaup.s.shubaklubak.Model;
+package edu.mareeaaup.s.shubaklubak.Models;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.mareeaaup.s.shubaklubak.R;
 
-public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
+public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder> {
 
 
     public ArrayList<Moode> modeList;
@@ -54,29 +49,54 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         modecount = 0;
-        for(int j=0 ; j<modeList.get(i).getDevices().size(); j++){
-            if(modeList.get(i).getDevices().get(j).getState() == Boolean.TRUE)
+        for (int j = 0; j < modeList.get(i).getDevices().size(); j++) {
+            if (modeList.get(i).getDevices().get(j).getState() == Boolean.TRUE)
                 modecount++;
         }
         viewHolder.modeName.setText(modeList.get(i).getName());
         viewHolder.status.setChecked(modeList.get(i).getState());
-        viewHolder.modecounte.setText(modecount+" Active Devices");
-        Log.d("GETF","inside adapter "+modeList.size());
+        viewHolder.modecounte.setText(modecount + " Active Devices");
+        Log.d("GETF", "inside adapter " + modeList.size());
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                Moode mode = new Moode();
                 //update switch button
-                if(isChecked==Boolean.TRUE){
+                if (isChecked == Boolean.TRUE) {
                     modeList.get(i).setState(Boolean.TRUE);
-                }else{
+                    mode = modeList.get(i);
+                    mDatabase.child(FirebaseAuth.getInstance().getUid()).child("modes")
+                            .child(modeList.get(i).getKey()).setValue(mode);
+                    //mode ON
+                    for (int i = 0; i < mode.getDevices().size(); i++) {
+                        mDatabase.child(FirebaseAuth.getInstance().getUid()).child("devices")
+                                .child(mode.getDevices().get(i).getKey())
+                                .setValue(mode.getDevices().get(i));
+                    }//end for loop
+
+
+                } else {
                     modeList.get(i).setState(Boolean.FALSE);
+                    mode = modeList.get(i);
+                    mDatabase.child(FirebaseAuth.getInstance().getUid()).child("modes")
+                            .child(modeList.get(i).getKey()).setValue(mode);
+                    //mode ON
+                    for (int i = 0; i < mode.getDevices().size(); i++) {
+                        String state;
+                        if(mode.getDevices().get(i).getState() == Boolean.TRUE)
+                            mode.getDevices().get(i).setState(Boolean.FALSE);
+
+
+                        mDatabase.child(FirebaseAuth.getInstance().getUid()).child("devices")
+                                .child(mode.getDevices().get(i).getKey())
+                                .setValue(mode.getDevices().get(i));
+                    }//end for loop
+
                 }
 
                 // code to update the firebase
-                Moode mode = new Moode();
-                mode = modeList.get(i);
-                mDatabase.child(FirebaseAuth.getInstance().getUid()).child("modes").child(modeList.get(i).getKey()).setValue(mode);
+
             }
         });
 
@@ -101,9 +121,10 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return (modeList != null) ? modeList.size():0;
+        return (modeList != null) ? modeList.size() : 0;
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView modeName;
         TextView modecounte;
@@ -115,7 +136,7 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             modeName = itemView.findViewById(R.id.card_name);
-            status =  itemView.findViewById(R.id.mode_switch);
+            status = itemView.findViewById(R.id.mode_switch);
             modecounte = itemView.findViewById(R.id.device_numbers);
             subItem = itemView.findViewById(R.id.sub_item);
             cardImage = itemView.findViewById(R.id.cover_image);
@@ -123,13 +144,12 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
 
         }
 
-        private void bind(Moode moode){
+        private void bind(Moode moode) {
             boolean expanded = moode.isExpanded();
             subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
             modecounte.setVisibility(expanded ? View.GONE : View.VISIBLE);
             cardImage.setVisibility(expanded ? View.GONE : View.VISIBLE);
-            arrowUp.setVisibility(expanded ? View.VISIBLE : View.GONE
-            );
+            arrowUp.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
         }
 

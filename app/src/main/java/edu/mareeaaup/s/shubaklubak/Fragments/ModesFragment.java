@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,33 +25,35 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.mareeaaup.s.shubaklubak.Model.Device;
-import edu.mareeaaup.s.shubaklubak.Model.ModesAdapter;
-import edu.mareeaaup.s.shubaklubak.Model.Moode;
+import edu.mareeaaup.s.shubaklubak.Models.Device;
+import edu.mareeaaup.s.shubaklubak.Models.ModesAdapter;
+import edu.mareeaaup.s.shubaklubak.Models.Moode;
 import edu.mareeaaup.s.shubaklubak.R;
 
 public class ModesFragment extends Fragment {
 
     private DatabaseReference mDatabase;
-    private FirebaseAuth mFirebaseAuth= FirebaseAuth.getInstance();
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private FloatingActionButton mFloatingActionButton;
     private RecyclerView recyclerView;
     private ModesAdapter mAdapter;
     private List<Device> mDevices = new ArrayList<>();
     private ArrayList<Moode> mModes = new ArrayList<>();
     private ProgressBar progressBar;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_modes,container,false);
+        final View view = inflater.inflate(R.layout.fragment_modes, container, false);
         progressBar = view.findViewById(R.id.progress_bar_modes);
 
         //-------------- Fitch data from firebase---------------
-        if (FirebaseAuth.getInstance().getUid() !=null) {
+        if (FirebaseAuth.getInstance().getUid() != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
             //get devices array from firebase
@@ -101,6 +104,7 @@ public class ModesFragment extends Fragment {
                             //end build recycler view
 
                         }//end onDataChange
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -108,9 +112,6 @@ public class ModesFragment extends Fragment {
                     });//end listener
 
         }//-------------- end Fitch data from firebase---------------
-
-
-
 
 
         //Floating action button setup
@@ -121,7 +122,7 @@ public class ModesFragment extends Fragment {
 
                 //create Dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                View mView = getLayoutInflater().inflate(R.layout.layout_dialog,null);
+                View mView = getLayoutInflater().inflate(R.layout.layout_dialog, null);
                 final EditText mDeviceName = mView.findViewById(R.id.dialog_device_name);
                 //set ok and cancel button
                 builder.setView(mView)
@@ -151,10 +152,10 @@ public class ModesFragment extends Fragment {
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful())
+                                                if (task.isSuccessful())
                                                     Toast.makeText(view.getContext(), "success", Toast.LENGTH_SHORT).show();
                                                 else
-                                                    Toast.makeText(view.getContext(),"Error", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(view.getContext(), "Error", Toast.LENGTH_SHORT).show();
                                             }
                                         });
 

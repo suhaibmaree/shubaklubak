@@ -1,4 +1,4 @@
-package edu.mareeaaup.s.shubaklubak.Model;
+package edu.mareeaaup.s.shubaklubak.Models;
 
 
 import java.io.Serializable;

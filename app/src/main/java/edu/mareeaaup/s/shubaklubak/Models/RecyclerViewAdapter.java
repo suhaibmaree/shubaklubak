@@ -1,4 +1,4 @@
-package edu.mareeaaup.s.shubaklubak.Model;
+package edu.mareeaaup.s.shubaklubak.Models;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -28,10 +28,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //for long click listener
     private onItemLongClickListener mListener;
-    public interface onItemLongClickListener{
+
+    public interface onItemLongClickListener {
         void onItemLongClick(int position);
     }
-    public void setOnItemLongClickListener(onItemLongClickListener listener){
+
+    public void setOnItemLongClickListener(onItemLongClickListener listener) {
         mListener = listener;
     }
 
@@ -43,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mFirebaseAuth.getUid()).child("devices");
 
 
-    public RecyclerViewAdapter(Context context, List<Device> devices ){
+    public RecyclerViewAdapter(Context context, List<Device> devices) {
         this.devices = devices;
         mContext = context;
     }
@@ -60,16 +62,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         Log.d(TAG, "onBindViewHolder: inside");
-        Log.d(TAG, "onBindViewHolder: inside"+devices.size());
-        Log.d(TAG, "onBindViewHolder: inside"+devices.get(i).getName());
+        Log.d(TAG, "onBindViewHolder: inside" + devices.size());
+        Log.d(TAG, "onBindViewHolder: inside" + devices.get(i).getName());
         viewHolder.deviceName.setText(devices.get(i).getName());
         viewHolder.status.setChecked(devices.get(i).getState());
 
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked2: "+ devices.size());
-                Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Clicked2: " + devices.size());
+                Toast.makeText(mContext, devices.get(i).getName(), Toast.LENGTH_SHORT).show();
             }
         });
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -77,9 +79,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 //update switch button
-                if(isChecked==Boolean.TRUE){
+                if (isChecked == Boolean.TRUE) {
                     devices.get(i).setState(Boolean.TRUE);
-                }else{
+                } else {
                     devices.get(i).setState(Boolean.FALSE);
                 }
 
@@ -93,11 +95,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return (devices != null) ? devices.size():0;
+        return (devices != null) ? devices.size() : 0;
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView deviceName;
         Switch status;
@@ -106,16 +108,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             deviceName = itemView.findViewById(R.id.device_name);
-            status =  itemView.findViewById(R.id.status);
+            status = itemView.findViewById(R.id.status);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
             //on click listener for card
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (mListener != null){
+                    if (mListener != null) {
                         int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
+                        if (position != RecyclerView.NO_POSITION) {
                             mListener.onItemLongClick(position);
                         }
                     }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,20 +14,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import edu.mareeaaup.s.shubaklubak.Model.Device;
-import edu.mareeaaup.s.shubaklubak.R;
-import edu.mareeaaup.s.shubaklubak.Model.RecyclerViewAdapter;
 
-public class HomeFragment extends Fragment{
+import edu.mareeaaup.s.shubaklubak.Models.Device;
+import edu.mareeaaup.s.shubaklubak.R;
+import edu.mareeaaup.s.shubaklubak.Models.RecyclerViewAdapter;
+
+public class HomeFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
     private List<Device> mDevices = new ArrayList<>();
@@ -37,17 +39,17 @@ public class HomeFragment extends Fragment{
     private ProgressBar progressBar;
     private DatabaseReference mDatabase;
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-    private int flag =0;
+    private int flag = 0;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_home,container,false);
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         progressBar = view.findViewById(R.id.progress_bar);
 
-        if (FirebaseAuth.getInstance().getUid() !=null) {
+        if (FirebaseAuth.getInstance().getUid() != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
             mDatabase.child(FirebaseAuth.getInstance().getUid()).child("devices")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -79,7 +81,7 @@ public class HomeFragment extends Fragment{
 
         }//end if
 
-        Log.d("getFireData","recyclerView");
+        Log.d("getFireData", "recyclerView");
 
         //build recycler view
         recyclerView = view.findViewById(R.id.recycler_view);
@@ -95,7 +97,7 @@ public class HomeFragment extends Fragment{
 
                 //create Dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                View mView = getLayoutInflater().inflate(R.layout.layout_dialog,null);
+                View mView = getLayoutInflater().inflate(R.layout.layout_dialog, null);
                 final EditText mDeviceName = mView.findViewById(R.id.dialog_device_name);
                 //set ok and cancel button
                 builder.setView(mView)

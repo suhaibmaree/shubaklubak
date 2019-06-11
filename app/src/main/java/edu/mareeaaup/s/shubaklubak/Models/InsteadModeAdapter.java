@@ -1,4 +1,4 @@
-package edu.mareeaaup.s.shubaklubak.Model;
+package edu.mareeaaup.s.shubaklubak.Models;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +28,12 @@ public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.
 
     //for long click listener
     private onItemLongClickListener mListener;
-    public interface onItemLongClickListener{
+
+    public interface onItemLongClickListener {
         void onItemLongClick(int position);
     }
-    public void setOnItemLongClickListener(onItemLongClickListener listener){
+
+    public void setOnItemLongClickListener(onItemLongClickListener listener) {
         mListener = listener;
     }
 
@@ -44,7 +45,7 @@ public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private Moode mMoode;
 
-    public InsteadModeAdapter(Context context, List<Device> devices, Moode moode ){
+    public InsteadModeAdapter(Context context, List<Device> devices, Moode moode) {
         this.devices = devices;
         this.mContext = context;
         this.mMoode = moode;
@@ -68,8 +69,8 @@ public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked2: "+ devices.size());
-                Toast.makeText(mContext, devices.get(i).getName(),Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Clicked2: " + devices.size());
+                Toast.makeText(mContext, devices.get(i).getName(), Toast.LENGTH_SHORT).show();
             }
         });
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -77,27 +78,27 @@ public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 //update switch button
-                if(isChecked==Boolean.TRUE){
+                if (isChecked == Boolean.TRUE) {
                     devices.get(i).setState(Boolean.TRUE);
-                }else{
+                } else {
                     devices.get(i).setState(Boolean.FALSE);
                 }
 
                 // code to update the firebase
                 Device device = new Device();
                 device = devices.get(i);
-                mDatabase.child(mFirebaseAuth.getUid()).child("modes").child(mMoode.getKey()).child("devices").child(i+"").setValue(device);
+                mDatabase.child(mFirebaseAuth.getUid()).child("modes").child(mMoode.getKey()).child("devices").child(i + "").setValue(device);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return (devices != null) ? devices.size():0;
+        return (devices != null) ? devices.size() : 0;
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView deviceName;
         CheckBox status;
@@ -106,7 +107,7 @@ public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             deviceName = itemView.findViewById(R.id.mode_device_card_device_name);
-            status =  itemView.findViewById(R.id.mode_device_card_status);
+            status = itemView.findViewById(R.id.mode_device_card_status);
             parentLayout = itemView.findViewById(R.id.mode_device_card_layout);
 
         }
