@@ -29,21 +29,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //for long click listener
     private onItemLongClickListener mListener;
 
-    public interface onItemLongClickListener {
-        void onItemLongClick(int position);
-    }
-
-    public void setOnItemLongClickListener(onItemLongClickListener listener) {
-        mListener = listener;
-    }
-
     //for database
     private Context mContext;
     private DatabaseReference databaseReference;
     private List<Device> devices = new ArrayList<>();
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mFirebaseAuth.getUid()).child("devices");
-
 
     public RecyclerViewAdapter(Context context, List<Device> devices) {
         this.devices = devices;
@@ -96,6 +87,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return (devices != null) ? devices.size() : 0;
+    }
+
+
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
+
+    public interface onItemLongClickListener {
+        void onItemLongClick(int position);
+    }
+
+    public void setOnItemLongClickListener(onItemLongClickListener listener) {
+        mListener = listener;
     }
 
 

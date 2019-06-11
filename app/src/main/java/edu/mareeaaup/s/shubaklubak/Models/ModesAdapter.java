@@ -83,8 +83,7 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder> 
                             .child(modeList.get(i).getKey()).setValue(mode);
                     //mode ON
                     for (int i = 0; i < mode.getDevices().size(); i++) {
-                        String state;
-                        if(mode.getDevices().get(i).getState() == Boolean.TRUE)
+                        if (mode.getDevices().get(i).getState() == Boolean.TRUE)
                             mode.getDevices().get(i).setState(Boolean.FALSE);
 
 

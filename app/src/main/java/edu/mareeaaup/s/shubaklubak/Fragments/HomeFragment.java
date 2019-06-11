@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +34,7 @@ import edu.mareeaaup.s.shubaklubak.Models.RecyclerViewAdapter;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
-    private List<Device> mDevices = new ArrayList<>();
+    private List<Device> mDevices;
     public RecyclerViewAdapter mAdapter;
     public RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -52,9 +53,10 @@ public class HomeFragment extends Fragment {
         if (FirebaseAuth.getInstance().getUid() != null) {
             mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
             mDatabase.child(FirebaseAuth.getInstance().getUid()).child("devices")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            mDevices = new ArrayList<>();
                             progressBar.setVisibility(View.VISIBLE);
                             Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
                             Log.d("getFireData", "before loop");
@@ -65,7 +67,7 @@ public class HomeFragment extends Fragment {
                                 Log.d("getFireData", "dev state " + ds.getValue(Device.class).getState());
 
                             }
-
+                            mAdapter.setDevices(mDevices);
                             mAdapter.notifyDataSetChanged();
                             Log.d("getFireData", "After loop");
                             Log.d("getFireData", "List size " + mDevices.size());
@@ -80,6 +82,7 @@ public class HomeFragment extends Fragment {
                     });
 
         }//end if
+
 
         Log.d("getFireData", "recyclerView");
 
@@ -128,6 +131,10 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
+
+        //for value changed listener
+
 
         return view;
     }//end onCreate
