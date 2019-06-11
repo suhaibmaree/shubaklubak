@@ -49,7 +49,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="6dp"
-                        android:textSize="18sp"
+                        android:textSize="22sp"
+                        android:textColor="@color/Black"
                         tools:text="Mode Name " />
 
                     <TextView
@@ -57,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
-                        android:textSize="10sp"
+                        android:textSize="14sp"
                         tools:text="5 Devices available " />
 
 
@@ -103,6 +104,17 @@
                     app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
                     app:layout_constraintEnd_toStartOf="@+id/arrow_down"
                     app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
+
+                <ImageView
+                    android:id="@+id/delete_mode_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/mode_switch"
+                    app:layout_constraintEnd_toStartOf="@+id/mode_switch"
+                    app:layout_constraintTop_toTopOf="@+id/mode_switch"
+                    app:srcCompat="@android:drawable/ic_menu_delete" />
 
 
             </android.support.constraint.ConstraintLayout>
