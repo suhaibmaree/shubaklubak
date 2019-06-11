@@ -10,6 +10,7 @@ public class Moode implements Serializable {
     private Boolean state;
     private String name;
     private String key;
+    private  boolean expanded;
     private List<Device> devices = new ArrayList<>();
     //private Map<String, Device> devices;
 
@@ -55,15 +56,12 @@ public class Moode implements Serializable {
         this.devices = devices;
     }
 
-    //    public Map<String, Device> getDevices() {
-//        return devices;
-//    }
+    public boolean isExpanded() {
+        return expanded;
+    }
 
-//    public void setDevices(Map<String, Device> devices) {
-//        this.devices = devices;
-//    }
-
-
-
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
 }
 

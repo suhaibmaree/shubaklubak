@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -22,9 +23,9 @@ import java.util.List;
 
 import edu.mareeaaup.s.shubaklubak.R;
 
-public class AddModeAdapter extends RecyclerView.Adapter<AddModeAdapter.ViewHolder> {
+public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.ViewHolder> {
 
-    private static final String TAG = "AddModeAdapter";
+    private static final String TAG = "InsteadModeAdapter";
 
     //for long click listener
     private onItemLongClickListener mListener;
@@ -41,17 +42,19 @@ public class AddModeAdapter extends RecyclerView.Adapter<AddModeAdapter.ViewHold
     private List<Device> devices = new ArrayList<>();
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private Moode mMoode;
 
-    public AddModeAdapter(Context context, List<Device> devices ){
+    public InsteadModeAdapter(Context context, List<Device> devices, Moode moode ){
         this.devices = devices;
-        mContext = context;
+        this.mContext = context;
+        this.mMoode = moode;
     }
 
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_deviseslist, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mode_device_card, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -83,7 +86,7 @@ public class AddModeAdapter extends RecyclerView.Adapter<AddModeAdapter.ViewHold
                 // code to update the firebase
                 Device device = new Device();
                 device = devices.get(i);
-                mDatabase.child(mFirebaseAuth.getUid()).child("devices").child(devices.get(i).getKey()).setValue(device);
+                mDatabase.child(mFirebaseAuth.getUid()).child("modes").child(mMoode.getKey()).child("devices").child(i+"").setValue(device);
             }
         });
     }
@@ -97,28 +100,16 @@ public class AddModeAdapter extends RecyclerView.Adapter<AddModeAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView deviceName;
-        Switch status;
+        CheckBox status;
         LinearLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            deviceName = itemView.findViewById(R.id.device_name);
-            status =  itemView.findViewById(R.id.status);
-            parentLayout = itemView.findViewById(R.id.parent_layout);
+            deviceName = itemView.findViewById(R.id.mode_device_card_device_name);
+            status =  itemView.findViewById(R.id.mode_device_card_status);
+            parentLayout = itemView.findViewById(R.id.mode_device_card_layout);
 
-            //on click listener for card
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (mListener != null){
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION){
-                            mListener.onItemLongClick(position);
-                        }
-                    }
-                    return false;
-                }
-            });
         }
+
     }
 }

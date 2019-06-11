@@ -2,6 +2,7 @@ package edu.mareeaaup.s.shubaklubak.Model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -28,19 +31,21 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
 
     public ArrayList<Moode> modeList;
     public Context mContext;
+    public int modecount;
+    InsteadModeAdapter mAdapter;
+    RecyclerView recyclerView;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
     private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     public ModesAdapter(Context mContext, ArrayList<Moode> modeList) {
         this.modeList = modeList;
         this.mContext = mContext;
-
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_deviseslist
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.mode_card
                 , viewGroup, false);
         ModesAdapter.ViewHolder holder = new ModesAdapter.ViewHolder(view);
         return holder;
@@ -48,17 +53,15 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
-
+        modecount = 0;
+        for(int j=0 ; j<modeList.get(i).getDevices().size(); j++){
+            if(modeList.get(i).getDevices().get(j).getState() == Boolean.TRUE)
+                modecount++;
+        }
         viewHolder.modeName.setText(modeList.get(i).getName());
         viewHolder.status.setChecked(modeList.get(i).getState());
-
+        viewHolder.modecounte.setText(modecount+" Active Devices");
         Log.d("GETF","inside adapter "+modeList.size());
-        viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, modeList.get(i).getName(),Toast.LENGTH_SHORT).show();
-            }
-        });
         viewHolder.status.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -76,6 +79,24 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
                 mDatabase.child(FirebaseAuth.getInstance().getUid()).child("modes").child(modeList.get(i).getKey()).setValue(mode);
             }
         });
+
+        //build recycler view
+        recyclerView = viewHolder.itemView.findViewById(R.id.insted_recyclerview_mode);
+        mAdapter = new InsteadModeAdapter(viewHolder.itemView.getContext(), modeList.get(i).getDevices(), modeList.get(i));
+        recyclerView.setAdapter(mAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(viewHolder.itemView.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        viewHolder.bind(modeList.get(i));
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean expanded = modeList.get(i).isExpanded();
+                modeList.get(i).setExpanded(!expanded);
+                notifyItemChanged(i);
+            }
+        });
     }
 
     @Override
@@ -85,16 +106,32 @@ public class ModesAdapter extends RecyclerView.Adapter<ModesAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView modeName;
+        TextView modecounte;
         Switch status;
-        LinearLayout parentLayout;
+        View subItem;
+        ImageView cardImage;
+        ImageView arrowUp;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            modeName = itemView.findViewById(R.id.device_name);
-            status =  itemView.findViewById(R.id.status);
-            parentLayout = itemView.findViewById(R.id.parent_layout);
-
+            modeName = itemView.findViewById(R.id.card_name);
+            status =  itemView.findViewById(R.id.mode_switch);
+            modecounte = itemView.findViewById(R.id.device_numbers);
+            subItem = itemView.findViewById(R.id.sub_item);
+            cardImage = itemView.findViewById(R.id.cover_image);
+            arrowUp = itemView.findViewById(R.id.arrow_up);
 
         }
+
+        private void bind(Moode moode){
+            boolean expanded = moode.isExpanded();
+            subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            modecounte.setVisibility(expanded ? View.GONE : View.VISIBLE);
+            cardImage.setVisibility(expanded ? View.GONE : View.VISIBLE);
+            arrowUp.setVisibility(expanded ? View.VISIBLE : View.GONE
+            );
+
+        }
+
     }
 }

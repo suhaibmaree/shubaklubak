@@ -23,17 +23,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.mareeaaup.s.shubaklubak.Model.AddModeAdapter;
 import edu.mareeaaup.s.shubaklubak.Model.Device;
 import edu.mareeaaup.s.shubaklubak.Model.ModesAdapter;
 import edu.mareeaaup.s.shubaklubak.Model.Moode;
-import edu.mareeaaup.s.shubaklubak.Model.RecyclerViewAdapter;
 import edu.mareeaaup.s.shubaklubak.R;
 
 public class ModesFragment extends Fragment {
