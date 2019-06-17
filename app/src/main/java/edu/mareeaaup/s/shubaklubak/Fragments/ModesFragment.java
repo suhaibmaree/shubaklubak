@@ -111,6 +111,8 @@ public class ModesFragment extends Fragment {
                         }
                     });//end listener
 
+
+
         }//-------------- end Fitch data from firebase---------------
 
 

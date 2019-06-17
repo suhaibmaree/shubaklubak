@@ -120,37 +120,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void add(View v) {
-
-        EditText name = findViewById(R.id.dev_name);
-        EditText state = findViewById(R.id.dev_state);
-        String deviceName = name.getText().toString();
-        boolean deviceState;
-
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-
-        if (state.getText().toString().equals("1"))
-            deviceState = Boolean.TRUE;
-        else
-            deviceState = Boolean.FALSE;
-
-        Device device = new Device();
-        device.setName(deviceName);
-        device.setState(deviceState);
-        device.setKey(mDatabase.push().getKey());
-        mDatabase.child(mFirebaseAuth.getUid()).child("devices").child(device.getKey()).setValue(device)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful())
-                            Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
-                        else
-                            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-    }
-
-
 }//end class

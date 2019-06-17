@@ -2,33 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:gravity="center">
+    >
+
+    <ImageView
+        android:layout_width="135dp"
+        android:layout_height="108dp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center"
+        android:layout_margin="100dp"/>
+
+    <TextView
+        android:id="@+id/active_devices_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="You Have 5 Active Devices"
+        android:textSize="30sp"
+        android:layout_gravity="center"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Administrator Fragment"
-        android:textSize="30sp" />
+        android:text="@string/add_message"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:layout_margin="16dp"/>
+
 
     <Button
+        android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:onClick="logout"/>
-
-    <EditText
-        android:id="@+id/dev_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/dev_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Device"
-        android:onClick="add"/>
+        android:text="apply"
+        android:textColor="@color/White"
+        android:onClick="add"
+        android:layout_gravity="center"
+        android:background="@drawable/button_corners"/>
 
 </LinearLayout>

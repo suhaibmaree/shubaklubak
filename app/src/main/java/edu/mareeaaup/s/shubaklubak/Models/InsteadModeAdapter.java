@@ -25,6 +25,20 @@ import edu.mareeaaup.s.shubaklubak.R;
 public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.ViewHolder> {
 
     private static final String TAG = "InsteadModeAdapter";
+    //for database
+    private Context mContext;
+    private DatabaseReference databaseReference;
+    private List<Device> devices = new ArrayList<>();
+    private List<Moode> mModes = new ArrayList<>();
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
+    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private Moode mMoode;
+
+    public InsteadModeAdapter(Context context, List<Device> devices, Moode moode) {
+        this.devices = devices;
+        this.mContext = context;
+        this.mMoode = moode;
+    }
 
     //for long click listener
     private onItemLongClickListener mListener;
@@ -37,20 +51,9 @@ public class InsteadModeAdapter extends RecyclerView.Adapter<InsteadModeAdapter.
         mListener = listener;
     }
 
-    //for database
-    private Context mContext;
-    private DatabaseReference databaseReference;
-    private List<Device> devices = new ArrayList<>();
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-    private FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-    private Moode mMoode;
-
-    public InsteadModeAdapter(Context context, List<Device> devices, Moode moode) {
-        this.devices = devices;
-        this.mContext = context;
-        this.mMoode = moode;
+    public void setmModes(List<Moode> mModes) {
+        this.mModes = mModes;
     }
-
 
     @NonNull
     @Override
