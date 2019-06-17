@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.help:
-                        Toast.makeText(MainActivity.this, "Help", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, Help.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.logout:

@@ -16,4 +16,5 @@
         completions."
     </string>
     <string name="add_message">If you would like to apply for a new device please click on the button below.</string>
+    <string name="help_text">ShubakLubak Smart Home is a simple control system and android smart home application based on Arduino electronic platform. It helps to control the lights, water heater, front door lock, and Water sprayers. This application will help the user to turns on and off the electronic devices in the home even when the user is outside. Also, it gives him better control in the house and it works as a reminder to the user. This gives reassurance about expenses and problems that can happen because of forgetting something.</string>
 </resources>
